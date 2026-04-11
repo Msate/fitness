@@ -103,6 +103,12 @@
   margin: 0;
 }
 
+.record-detail {
+  color: #666;
+  font-size: 12px;
+  margin: 4px 0 0 0;
+}
+
 .record-note {
   color: #666;
   font-size: 12px;

@@ -30,6 +30,13 @@ function RecordList({ checkins, weights, onDeleteCheckin, onDeleteWeight }) {
                   <div className="record-content">
                     <p className="record-activity">{checkin.activity}</p>
                     <p className="record-time">{checkin.date} {checkin.time}</p>
+                    {(checkin.duration || checkin.calories) && (
+                      <p className="record-detail">
+                        {checkin.duration && `⏱️ ${checkin.duration}分钟`}
+                        {checkin.duration && checkin.calories && ' · '}
+                        {checkin.calories && `🔥 ${checkin.calories}大卡`}
+                      </p>
+                    )}
                   </div>
                   <button
                     className="delete-btn"

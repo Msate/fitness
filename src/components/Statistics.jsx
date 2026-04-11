@@ -7,6 +7,9 @@ function Statistics({ checkins, weights, onAddCheckin, onAddWeight }) {
   const [selectedActivity, setSelectedActivity] = useState('')
   const [weightInput, setWeightInput] = useState('')
   const [noteInput, setNoteInput] = useState('')
+  const [durationMinutes, setDurationMinutes] = useState('30')
+  const [toastMessage, setToastMessage] = useState('')
+  const [showToast, setShowToast] = useState(false)
 
   const activities = [
     '🏃 跑步',
@@ -18,6 +21,30 @@ function Statistics({ checkins, weights, onAddCheckin, onAddWeight }) {
     '🏊 游泳',
     '🚶 散步'
   ]
+
+  // 运动时间长度对应的基础卡路里消耗 (每分钟)
+  const calorieMap = {
+    '跑步': 12,
+    '骑车': 10,
+    '健身房': 8,
+    '瑜伽': 4,
+    '家务': 3,
+    '篮球': 11,
+    '游泳': 14,
+    '散步': 5
+  }
+
+  const calculateCalories = (activity, minutes) => {
+    const activityName = activity.replace(/^[^\s]+\s/, '')
+    const baseCalorie = calorieMap[activityName] || 5
+    return Math.round(baseCalorie * minutes)
+  }
+
+  const showToastMessage = (message, duration = 3000) => {
+    setToastMessage(message)
+    setShowToast(true)
+    setTimeout(() => setShowToast(false), duration)
+  }
 
   const getTodayCheckins = () => {
     const today = new Date().toLocaleDateString('zh-CN')
@@ -39,10 +66,27 @@ function Statistics({ checkins, weights, onAddCheckin, onAddWeight }) {
   }
 
   const handleCheckinSubmit = (activity) => {
-    if (activity) {
-      onAddCheckin(activity.replace(/^[^\s]+\s/, ''))
+    if (activity && durationMinutes) {
+      const activityName = activity.replace(/^[^\s]+\s/, '')
+      const minutes = parseInt(durationMinutes) || 30
+      const calories = calculateCalories(activity, minutes)
+      
+      onAddCheckin(activityName, minutes, calories)
+      
+      // 显示 toast 提示
+      const hours = Math.floor(minutes / 60)
+      const mins = minutes % 60
+      let durationText = ''
+      if (hours > 0) {
+        durationText = `${hours}小时${mins > 0 ? mins + '分钟' : ''}`
+      } else {
+        durationText = `${minutes}分钟`
+      }
+      showToastMessage(`运动了 ${durationText}，消耗 ${calories} 大卡`)
+      
       setShowCheckinModal(false)
       setSelectedActivity('')
+      setDurationMinutes('30')
     }
   }
 
@@ -127,6 +171,26 @@ function Statistics({ checkins, weights, onAddCheckin, onAddWeight }) {
                   </button>
                 ))}
               </div>
+              
+              {selectedActivity && (
+                <div className="form-group" style={{ marginTop: '16px' }}>
+                  <label>运动时长（分钟）</label>
+                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                    <input 
+                      type="number" 
+                      min="1"
+                      max="300"
+                      placeholder="输入分钟数"
+                      value={durationMinutes}
+                      onChange={e => setDurationMinutes(e.target.value)}
+                      style={{ flex: 1 }}
+                    />
+                    <span style={{ fontSize: '12px', color: '#999' }}>
+                      约消耗 {calculateCalories(selectedActivity, parseInt(durationMinutes) || 0)} 大卡
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
             <div className="modal-footer">
               <button 
@@ -138,12 +202,19 @@ function Statistics({ checkins, weights, onAddCheckin, onAddWeight }) {
               <button 
                 className="btn-submit"
                 onClick={() => handleCheckinSubmit(selectedActivity)}
-                disabled={!selectedActivity}
+                disabled={!selectedActivity || !durationMinutes}
               >
                 确定打卡
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Toast 提示 */}
+      {showToast && (
+        <div className="toast">
+          {toastMessage}
         </div>
       )}
 

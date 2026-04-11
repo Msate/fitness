@@ -27,10 +27,12 @@ function App() {
     localStorage.setItem('weights', JSON.stringify(weights))
   }, [weights])
 
-  const addCheckin = (activity) => {
+  const addCheckin = (activity, durationMinutes = 30, calories = 0) => {
     const newCheckin = {
       id: Date.now(),
       activity,
+      duration: durationMinutes,
+      calories,
       date: new Date().toLocaleDateString('zh-CN'),
       time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })
     }
