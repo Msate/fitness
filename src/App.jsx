@@ -4,6 +4,7 @@ import CheckinForm from './components/CheckinForm'
 import WeightForm from './components/WeightForm'
 import RecordList from './components/RecordList'
 import Statistics from './components/Statistics'
+import WeightChart from './components/WeightChart'
 
 function App() {
   const [checkins, setCheckins] = useState([])
@@ -62,7 +63,7 @@ function App() {
     <div className="app">
       <header className="header">
         <h1>💪 健身打卡</h1>
-        <p>老婆监督我减肥 - 坚持就是胜利!</p>
+        <p>和老婆一起坚持</p>
       </header>
 
       <nav className="nav">
@@ -70,19 +71,19 @@ function App() {
           className={`nav-btn ${activeTab === 'dashboard' ? 'active' : ''}`}
           onClick={() => setActiveTab('dashboard')}
         >
-          📊 仪表板
+          📊<br/>仪表板
         </button>
         <button 
           className={`nav-btn ${activeTab === 'checkin' ? 'active' : ''}`}
           onClick={() => setActiveTab('checkin')}
         >
-          ✅ 打卡
+          ✅<br/>打卡
         </button>
         <button 
           className={`nav-btn ${activeTab === 'weight' ? 'active' : ''}`}
           onClick={() => setActiveTab('weight')}
         >
-          ⚖️ 体重
+          ⚖️<br/>体重
         </button>
       </nav>
 
@@ -90,6 +91,7 @@ function App() {
         {activeTab === 'dashboard' && (
           <>
             <Statistics checkins={checkins} weights={weights} />
+            <WeightChart weights={weights} />
             <RecordList 
               checkins={checkins} 
               weights={weights}
@@ -112,3 +114,4 @@ function App() {
 }
 
 export default App
+

@@ -1,0 +1,85 @@
+.weight-chart {
+  background: white;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.weight-chart h3 {
+  margin: 0 0 12px;
+  font-size: 16px;
+  color: #333;
+}
+
+.chart-empty {
+  text-align: center;
+  padding: 30px 20px;
+  color: #999;
+  font-size: 14px;
+}
+
+.chart-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.chart-tab {
+  flex: 1;
+  padding: 8px 12px;
+  border: 2px solid #e0e0e0;
+  background: #f9f9f9;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.chart-tab.active {
+  border-color: #667eea;
+  background: #667eea;
+  color: white;
+}
+
+.chart-tab:active {
+  transform: scale(0.95);
+}
+
+.chart-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.stat {
+  text-align: center;
+  padding: 8px;
+  background: #f9f9f9;
+  border-radius: 6px;
+}
+
+.stat .label {
+  font-size: 11px;
+  color: #999;
+  margin-bottom: 4px;
+}
+
+.stat .value {
+  font-size: 16px;
+  font-weight: bold;
+  color: #667eea;
+}
+
+@media (max-width: 480px) {
+  .chart-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .weight-chart {
+    padding: 12px;
+  }
+}
