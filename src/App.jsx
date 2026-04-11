@@ -4,6 +4,7 @@ import Auth from './components/Auth'
 import Statistics from './components/Statistics'
 import WeightChart from './components/WeightChart'
 import RecordList from './components/RecordList'
+import Circle from './components/Circle'
 import { supabase } from './supabaseClient'
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
   const [checkins, setCheckins] = useState([])
   const [weights, setWeights] = useState([])
   const [loading, setLoading] = useState(true)
+  const [page, setPage] = useState('home')
 
   // 检查本地登录状态
   useEffect(() => {
@@ -73,7 +75,7 @@ function App() {
         activity,
         duration: durationMinutes,
         calories,
-        date: new Date().toLocaleDateString('zh-CN'),
+        date: new Date().toISOString().split('T')[0],
         time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
         created_at: new Date().toISOString()
       }
@@ -97,7 +99,7 @@ function App() {
         user_id: userId,
         weight: parseFloat(weight),
         note,
-        date: new Date().toLocaleDateString('zh-CN'),
+        date: new Date().toISOString().split('T')[0],
         time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
         created_at: new Date().toISOString()
       }
@@ -138,6 +140,10 @@ function App() {
     return <Auth onAuthSuccess={handleAuthSuccess} />
   }
 
+  if (page === 'circle') {
+    return <Circle onBack={() => setPage('home')} user={user} />
+  }
+
   if (loading) {
     return (
       <div style={{
@@ -173,6 +179,7 @@ function App() {
           weights={weights}
           onAddCheckin={addCheckin}
           onAddWeight={addWeight}
+          onOpenCircle={() => setPage('circle')}
         />
         <WeightChart weights={weights} />
         <RecordList 

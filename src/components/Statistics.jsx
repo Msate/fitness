@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './Statistics.css'
 
-function Statistics({ checkins, weights, onAddCheckin, onAddWeight }) {
+function Statistics({ checkins, weights, onAddCheckin, onAddWeight, onOpenCircle }) {
   const [showCheckinModal, setShowCheckinModal] = useState(false)
   const [showWeightModal, setShowWeightModal] = useState(false)
   const [selectedActivity, setSelectedActivity] = useState('')
@@ -110,8 +110,10 @@ function Statistics({ checkins, weights, onAddCheckin, onAddWeight }) {
         <div className="stat-info">
           <p className="stat-label">今日运动</p>
           <div className="stat-content">
-            <span className="stat-value">{todayCheckins}</span>
-            <span className="stat-detail">次</span>
+            <div className="stat-value-group">
+              <span className="stat-value">{todayCheckins}</span>
+              <span className="stat-detail">次</span>
+            </div>
             <button 
               className="stat-action-btn"
               onClick={() => setShowCheckinModal(true)}
@@ -127,8 +129,10 @@ function Statistics({ checkins, weights, onAddCheckin, onAddWeight }) {
         <div className="stat-info">
           <p className="stat-label">最新体重</p>
           <div className="stat-content">
-            <span className="stat-value">{latestWeight || '--'}</span>
-            <span className="stat-detail">kg</span>
+            <div className="stat-value-group">
+              <span className="stat-value">{latestWeight || '--'}</span>
+              <span className="stat-detail">kg</span>
+            </div>
             <button 
               className="stat-action-btn"
               onClick={() => setShowWeightModal(true)}
@@ -137,6 +141,12 @@ function Statistics({ checkins, weights, onAddCheckin, onAddWeight }) {
             </button>
           </div>
         </div>
+      </div>
+
+      {/* 我的圈子入口 */}
+      <div className="circle-banner" onClick={onOpenCircle}>
+        <span className="circle-banner-text">🏆 我的圈子</span>
+        <span className="circle-banner-sub">快来和小伙伴们PK →</span>
       </div>
 
       {/* 打卡模态框 */}

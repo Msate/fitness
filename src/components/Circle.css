@@ -1,0 +1,388 @@
+.circle-page {
+  min-height: 100vh;
+  background: #0d0d0d;
+  display: flex;
+  flex-direction: column;
+}
+
+.circle-header {
+  background: #1a1a1a;
+  border-bottom: 1px solid #333;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.circle-header h1 {
+  color: #ffffff;
+  font-size: 18px;
+  margin: 0;
+}
+
+.circle-back-btn {
+  background: none;
+  border: none;
+  color: #d4af37;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.circle-main {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 操作入口 */
+.circle-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.circle-action-card {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 18px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.circle-action-card:active {
+  background: #262626;
+  border-color: #d4af37;
+}
+
+.circle-action-icon {
+  font-size: 28px;
+}
+
+.circle-action-label {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.circle-action-desc {
+  color: #888;
+  font-size: 12px;
+}
+
+/* 列表 */
+.circle-list-section h3 {
+  color: #ffffff;
+  font-size: 15px;
+  margin: 0 0 10px;
+}
+
+.circle-hint {
+  color: #555;
+  font-size: 13px;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.circle-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.circle-item {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-left: 4px solid #d4af37;
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.circle-item-name {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.circle-item-slogan {
+  color: #888;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.circle-item-code {
+  color: #d4af37;
+  font-size: 12px;
+  letter-spacing: 2px;
+}
+
+/* 弹窗 */
+.circle-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.circle-modal {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 360px;
+  overflow: hidden;
+}
+
+.circle-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #333;
+}
+
+.circle-modal-header h2 {
+  color: #ffffff;
+  font-size: 16px;
+  margin: 0;
+}
+
+.circle-modal-close {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.circle-modal-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.circle-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.circle-form-group label {
+  color: #aaa;
+  font-size: 13px;
+}
+
+.circle-form-group input {
+  background: #262626;
+  border: 1px solid #444;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 15px;
+  padding: 10px 12px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.circle-form-group input:focus {
+  border-color: #d4af37;
+}
+
+.circle-primary-btn {
+  background: #d4af37;
+  color: #0d0d0d;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 12px;
+  cursor: pointer;
+  width: 100%;
+  transition: opacity 0.2s;
+}
+
+.circle-primary-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* 创建成功 */
+.circle-success-name {
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  margin: 0;
+}
+
+.circle-success-hint {
+  color: #888;
+  font-size: 13px;
+  text-align: center;
+  margin: 0;
+}
+
+.circle-invite-code {
+  background: #262626;
+  border: 2px dashed #d4af37;
+  border-radius: 12px;
+  color: #d4af37;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 8px;
+  text-align: center;
+  padding: 16px;
+}
+
+.circle-error {
+  color: #ff6b6b;
+  font-size: 13px;
+  margin: 0;
+  text-align: center;
+}
+
+/* 圈子切换标签 */
+.circle-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.circle-tab {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 20px;
+  color: #888;
+  font-size: 13px;
+  padding: 6px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.circle-tab.active {
+  background: #d4af37;
+  border-color: #d4af37;
+  color: #0d0d0d;
+  font-weight: 700;
+}
+
+/* 圈子详情卡片 */
+.circle-detail-card {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-left: 4px solid #d4af37;
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.circle-detail-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.circle-detail-name {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.circle-detail-slogan {
+  color: #888;
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+.circle-detail-code {
+  background: #262626;
+  border: 1px dashed #d4af37;
+  border-radius: 6px;
+  color: #d4af37;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  padding: 4px 10px;
+  flex-shrink: 0;
+}
+
+/* 排名切换标签 */
+.rank-tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.rank-tab {
+  flex: 1;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #888;
+  font-size: 13px;
+  padding: 8px 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.rank-tab.active {
+  background: #262626;
+  border-color: #d4af37;
+  color: #ffffff;
+}
+
+/* 榜单 */
+.rank-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rank-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+
+.rank-item.rank-me {
+  background: #1f1c10;
+  border-color: #d4af37;
+}
+
+.rank-no {
+  font-size: 18px;
+  min-width: 28px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.rank-name {
+  flex: 1;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.rank-value {
+  color: #d4af37;
+  font-size: 14px;
+  font-weight: 700;
+}

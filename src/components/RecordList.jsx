@@ -28,8 +28,10 @@ function RecordList({ checkins, weights, onDeleteCheckin, onDeleteWeight }) {
               {paginatedCheckins.map(checkin => (
                 <div key={checkin.id} className="record-item checkin-item">
                   <div className="record-content">
-                    <p className="record-activity">{checkin.activity}</p>
-                    <p className="record-time">{checkin.date} {checkin.time}</p>
+                    <div className="record-main-row">
+                      <p className="record-activity">{checkin.activity}</p>
+                      <p className="record-time">{checkin.date} {checkin.time}</p>
+                    </div>
                     {(checkin.duration || checkin.calories) && (
                       <p className="record-detail">
                         {checkin.duration && `⏱️ ${checkin.duration}分钟`}

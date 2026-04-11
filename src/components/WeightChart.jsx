@@ -1,28 +1,64 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import './WeightChart.css'
 
 function WeightChart({ weights }) {
-  const [timeRange, setTimeRange] = useState('7days')
+  const [timeRange, setTimeRange] = useState('15days')
 
   const getChartData = () => {
-    if (weights.length === 0) return []
-
-    const sortedWeights = [...weights].sort((a, b) => new Date(a.date) - new Date(b.date))
     const now = new Date()
-    let filteredData = []
 
-    if (timeRange === '7days') {
-      const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
-      filteredData = sortedWeights.filter(w => new Date(w.date) >= weekAgo)
-    } else if (timeRange === '30days') {
-      const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
-      filteredData = sortedWeights.filter(w => new Date(w.date) >= monthAgo)
-    } else {
-      filteredData = sortedWeights
+    if (weights.length === 0) {
+      if (timeRange === '15days') {
+        const dates = []
+        for (let i = 14; i >= 0; i--) {
+          const date = new Date(now.getTime() - i * 24 * 60 * 60 * 1000)
+          const dateStr = date.toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' })
+          dates.push({ date: dateStr, weight: null, fullDate: date.toISOString().split('T')[0] })
+        }
+        return dates
+      }
+      return []
     }
 
-    return filteredData.map(w => ({
+    const sortedWeights = [...weights].sort((a, b) => new Date(a.date) - new Date(b.date))
+
+    if (timeRange === '15days') {
+      const daysAgo = new Date(now.getTime() - 15 * 24 * 60 * 60 * 1000)
+      const filtered = sortedWeights.filter(w => new Date(w.date) >= daysAgo)
+      const dataMap = {}
+      filtered.forEach(w => {
+        // 兼容 ISO 格式 (2026-04-11) 和 zh-CN 格式 (2026/4/11)
+        const isoDate = w.date.includes('/') 
+          ? new Date(w.date.replace(/\//g, '-')).toISOString().split('T')[0]
+          : w.date
+        dataMap[isoDate] = w.weight
+      })
+      const dates = []
+      let lastKnownWeight = null
+      // 查找15天范围之前最近的一条记录作为初始值
+      const allSorted = [...weights].sort((a, b) => new Date(a.date) - new Date(b.date))
+      for (const w of allSorted) {
+        const isoDate = w.date.includes('/')
+          ? new Date(w.date.replace(/\//g, '-')).toISOString().split('T')[0]
+          : w.date
+        if (isoDate < daysAgo.toISOString().split('T')[0]) {
+          lastKnownWeight = w.weight
+        }
+      }
+      for (let i = 14; i >= 0; i--) {
+        const date = new Date(now.getTime() - i * 24 * 60 * 60 * 1000)
+        const dateStr = date.toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' })
+        const fullDate = date.toISOString().split('T')[0]
+        if (dataMap[fullDate] !== undefined) {
+          lastKnownWeight = dataMap[fullDate]
+        }
+        dates.push({ date: dateStr, weight: lastKnownWeight, fullDate })
+      }
+      return dates
+    }
+
+    return sortedWeights.map(w => ({
       date: new Date(w.date).toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' }),
       weight: w.weight,
       fullDate: w.date
@@ -30,35 +66,56 @@ function WeightChart({ weights }) {
   }
 
   const data = getChartData()
-  const currentWeight = weights.length > 0 ? weights[0].weight : null
-  const avgWeight = data.length > 0 ? (data.reduce((sum, d) => sum + d.weight, 0) / data.length).toFixed(1) : null
-  const minWeight = data.length > 0 ? Math.min(...data.map(d => d.weight)).toFixed(1) : null
-  const maxWeight = data.length > 0 ? Math.max(...data.map(d => d.weight)).toFixed(1) : null
+  const dataWithValue = data.filter(d => d.weight !== null && d.weight !== undefined)
 
-  if (data.length === 0) {
+  const minWeight = dataWithValue.length > 0 ? Math.min(...dataWithValue.map(d => d.weight)) : null
+  const maxWeight = dataWithValue.length > 0 ? Math.max(...dataWithValue.map(d => d.weight)) : null
+
+  const CustomDotWithLabel = (props) => {
+    const { cx, cy, payload } = props
+    if (!payload || payload.weight === null || payload.weight === undefined) return null
+    const isMin = payload.weight === minWeight
+    const isMax = payload.weight === maxWeight
+    const r = (isMin || isMax) ? 5 : 4
+    const labelY = isMax ? cy - 12 : cy + 20
     return (
-      <div className="weight-chart">
-        <div className="chart-empty">📊 暂无体重数据</div>
-      </div>
+      <g>
+        <circle cx={cx} cy={cy} r={r} fill="#d4af37" stroke="#0d0d0d" strokeWidth={isMin || isMax ? 2 : 1} />
+        {(isMin || isMax) && (
+          <text
+            x={cx}
+            y={labelY}
+            textAnchor="middle"
+            fontSize={11}
+            fill="#d4af37"
+            fontWeight="bold"
+          >
+            {payload.weight}kg
+          </text>
+        )}
+      </g>
     )
+  }
+
+  const formatXAxis = (value, index) => {
+    const len = data.length
+    if (len <= 3) return value
+    if (index === 0) return value
+    if (index === Math.floor(len / 2)) return value
+    if (index === len - 1) return value
+    return ''
   }
 
   return (
     <div className="weight-chart">
-      <h3>📈 体重走势</h3>
+      <h3>体重走势</h3>
 
       <div className="chart-tabs">
         <button
-          className={`chart-tab ${timeRange === '7days' ? 'active' : ''}`}
-          onClick={() => setTimeRange('7days')}
+          className={`chart-tab ${timeRange === '15days' ? 'active' : ''}`}
+          onClick={() => setTimeRange('15days')}
         >
-          7日
-        </button>
-        <button
-          className={`chart-tab ${timeRange === '30days' ? 'active' : ''}`}
-          onClick={() => setTimeRange('30days')}
-        >
-          30日
+          近15日
         </button>
         <button
           className={`chart-tab ${timeRange === 'all' ? 'active' : ''}`}
@@ -68,57 +125,45 @@ function WeightChart({ weights }) {
         </button>
       </div>
 
-      <div className="chart-stats">
-        <div className="stat">
-          <div className="label">当前</div>
-          <div className="value">{currentWeight}</div>
-        </div>
-        <div className="stat">
-          <div className="label">平均</div>
-          <div className="value">{avgWeight}</div>
-        </div>
-        <div className="stat">
-          <div className="label">最低</div>
-          <div className="value">{minWeight}</div>
-        </div>
-        <div className="stat">
-          <div className="label">最高</div>
-          <div className="value">{maxWeight}</div>
-        </div>
-      </div>
-
+      {dataWithValue.length === 0 ? (
+        <div className="chart-empty">暂无体重数据</div>
+      ) : (
       <ResponsiveContainer width="100%" height={280}>
-        <LineChart data={data} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+        <LineChart data={data} margin={{ top: 28, right: 10, left: -20, bottom: 28 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#333" />
           <XAxis 
             dataKey="date" 
-            tick={{ fontSize: 12 }}
-            stroke="#999"
+            tick={{ fontSize: 12, fill: '#888' }}
+            stroke="#333"
+            tickFormatter={formatXAxis}
           />
           <YAxis 
-            domain="dataMin" 
-            tick={{ fontSize: 12 }}
-            stroke="#999"
+            domain={[dataMin => Math.floor(dataMin) - 1, dataMax => Math.ceil(dataMax) + 1]}
+            tick={{ fontSize: 12, fill: '#888' }}
+            stroke="#333"
           />
           <Tooltip
             contentStyle={{
-              background: 'white',
-              border: '1px solid #ddd',
+              background: '#262626',
+              border: '1px solid #d4af37',
               borderRadius: '8px',
-              fontSize: '12px'
+              fontSize: '12px',
+              color: '#d4af37'
             }}
             formatter={(value) => `${value} kg`}
           />
           <Line
             type="monotone"
             dataKey="weight"
-            stroke="#00B5D8"
+            stroke="#d4af37"
             strokeWidth={2}
-            dot={{ fill: '#00B5D8', r: 4 }}
+            connectNulls={true}
+            dot={<CustomDotWithLabel />}
             activeDot={{ r: 6 }}
           />
         </LineChart>
       </ResponsiveContainer>
+      )}
     </div>
   )
 }
