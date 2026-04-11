@@ -107,7 +107,6 @@ function Statistics({ checkins, weights, onAddCheckin, onAddWeight }) {
     <div className="statistics">
       {/* 今日打卡卡片 */}
       <div className="stat-card">
-        <div className="stat-icon">✅</div>
         <div className="stat-info">
           <p className="stat-label">今日运动</p>
           <div className="stat-content">
@@ -123,19 +122,8 @@ function Statistics({ checkins, weights, onAddCheckin, onAddWeight }) {
         </div>
       </div>
 
-      {/* 本周打卡卡片 */}
-      <div className="stat-card">
-        <div className="stat-icon">📅</div>
-        <div className="stat-info">
-          <p className="stat-label">本周打卡</p>
-          <p className="stat-value">{weekCheckins}</p>
-          <p className="stat-detail">次</p>
-        </div>
-      </div>
-
       {/* 最新体重卡片 */}
       <div className="stat-card">
-        <div className="stat-icon">⚖️</div>
         <div className="stat-info">
           <p className="stat-label">最新体重</p>
           <div className="stat-content">
