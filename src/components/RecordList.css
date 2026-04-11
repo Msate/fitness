@@ -37,7 +37,7 @@
   padding: 12px;
   background: #f9f9f9;
   border-radius: 10px;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid #00B5D8;
   transition: all 0.3s;
 }
 
@@ -75,7 +75,7 @@
 
 .weight-value {
   font-size: 18px;
-  color: #667eea;
+  color: #00B5D8;
   font-weight: bold;
 }
 
@@ -169,9 +169,9 @@
 }
 
 .pagination-btn:not(:disabled):active {
-  background: #667eea;
+  background: #00B5D8;
   color: white;
-  border-color: #667eea;
+  border-color: #00B5D8;
 }
 
 .pagination-info {

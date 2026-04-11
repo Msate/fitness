@@ -112,9 +112,9 @@ function WeightChart({ weights }) {
           <Line
             type="monotone"
             dataKey="weight"
-            stroke="#667eea"
+            stroke="#00B5D8"
             strokeWidth={2}
-            dot={{ fill: '#667eea', r: 4 }}
+            dot={{ fill: '#00B5D8', r: 4 }}
             activeDot={{ r: 6 }}
           />
         </LineChart>

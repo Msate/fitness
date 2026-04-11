@@ -27,7 +27,7 @@
 }
 
 .stat-card.highlight {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #00B5D8 0%, #0077B6 100%);
   color: white;
 }
 
@@ -61,7 +61,7 @@
 .stat-value {
   font-size: 18px;
   font-weight: bold;
-  color: #667eea;
+  color: #00B5D8;
   margin: 0;
   line-height: 1;
   display: inline;
