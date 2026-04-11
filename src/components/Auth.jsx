@@ -28,30 +28,31 @@ function Auth({ onAuthSuccess }) {
     try {
       if (isLogin) {
         // 登录：查询用户并验证密码
-        const { data: profiles } = await supabase
+        const { data: profiles, error: queryError } = await supabase
           .from('profiles')
           .select('*')
           .eq('username', username)
-          .single()
 
-        if (!profiles) {
+        if (queryError || !profiles || profiles.length === 0) {
           setError('用户名或密码错误')
           return
         }
 
+        const profile = profiles[0]
+
         // 验证密码
         const hashedPassword = hashPassword(password)
-        if (profiles.password_hash !== hashedPassword) {
+        if (profile.password_hash !== hashedPassword) {
           setError('用户名或密码错误')
           return
         }
 
         localStorage.setItem('user', JSON.stringify({
-          id: profiles.id,
-          username: profiles.username
+          id: profile.id,
+          username: profile.username
         }))
 
-        onAuthSuccess(profiles.id, profiles.username)
+        onAuthSuccess(profile.id, profile.username)
       } else {
         // 注册：创建新用户
         if (!username || !password) {
@@ -70,14 +71,18 @@ function Auth({ onAuthSuccess }) {
         }
 
         // 检查用户名是否已被使用
-        const { data: existingUser } = await supabase
+        const { data: existingUsers, error: checkError } = await supabase
           .from('profiles')
           .select('id')
           .eq('username', username)
-          .single()
 
-        if (existingUser) {
-          setError('用户名已被使用')
+        if (checkError) {
+          setError('检查用户名失败，请重试')
+          return
+        }
+
+        if (existingUsers && existingUsers.length > 0) {
+          setError('用户名已被使用，请选择其他用户名')
           return
         }
 
