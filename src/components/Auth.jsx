@@ -120,8 +120,8 @@ function Auth({ onAuthSuccess }) {
   return (
     <div className="auth-container">
       <div className="auth-box">
-        <h1>💪 健身打卡</h1>
-        <p className="auth-subtitle">和老婆一起坚持</p>
+        <h1>Fitness</h1>
+        <p className="auth-subtitle">减肥让生活更美好</p>
 
         <form onSubmit={handleAuth}>
           <div className="auth-tabs">

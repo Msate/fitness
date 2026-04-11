@@ -157,8 +157,8 @@ function App() {
       <header className="header">
         <div className="header-content">
           <div>
-            <h1>💪 健身打卡</h1>
-            <p>和老婆一起坚持</p>
+            <h1>Fitness</h1>
+            <p>减肥让生活更美好</p>
           </div>
           <div className="header-user">
             <span className="username">{user.username}</span>
