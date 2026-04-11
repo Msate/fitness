@@ -1,13 +1,13 @@
 .weight-form .tips {
   margin-top: 15px;
   padding: 12px;
-  background: #f0f8ff;
-  border-left: 4px solid #667eea;
+  background: rgba(212, 175, 55, 0.1);
+  border-left: 4px solid #d4af37;
   border-radius: 8px;
 }
 
 .weight-form .tips h3 {
-  color: #667eea;
+  color: #d4af37;
   margin: 0 0 10px 0;
   font-size: 14px;
 }
@@ -19,7 +19,7 @@
 }
 
 .weight-form .tips li {
-  color: #666;
+  color: #aaa;
   padding: 6px 0;
   line-height: 1.5;
   font-size: 13px;
@@ -27,7 +27,7 @@
 
 .weight-form .tips li:before {
   content: "✓ ";
-  color: #667eea;
+  color: #d4af37;
   font-weight: bold;
   margin-right: 6px;
 }

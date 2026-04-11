@@ -19,7 +19,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #00B5D8 0%, #0077B6 100%);
+  background: #0d0d0d;
+  color: #ffffff;
   overflow-x: hidden;
   
   /* 移动端优化 */

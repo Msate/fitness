@@ -1,6 +1,6 @@
 .auth-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #00B5D8 0%, #0077B6 100%);
+  background: #0d0d0d;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -8,10 +8,11 @@
 }
 
 .auth-box {
-  background: white;
+  background: #1a1a1a;
   border-radius: 16px;
   padding: 40px 30px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  border: 1px solid #333333;
   width: 100%;
   max-width: 400px;
 }
@@ -20,13 +21,13 @@
   margin: 0 0 8px;
   font-size: 28px;
   text-align: center;
-  color: #333;
+  color: #d4af37;
 }
 
 .auth-subtitle {
   margin: 0 0 30px;
   font-size: 14px;
-  color: #999;
+  color: #888;
   text-align: center;
 }
 
@@ -34,7 +35,7 @@
   display: flex;
   gap: 10px;
   margin-bottom: 24px;
-  border-bottom: 2px solid #f0f0f0;
+  border-bottom: 2px solid #333333;
 }
 
 .tab-btn {
@@ -42,7 +43,7 @@
   padding: 12px;
   border: none;
   background: none;
-  color: #999;
+  color: #666;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -51,7 +52,7 @@
 }
 
 .tab-btn.active {
-  color: #00B5D8;
+  color: #d4af37;
 }
 
 .tab-btn.active::after {
@@ -61,7 +62,7 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: #00B5D8;
+  background: #d4af37;
 }
 
 .form-group {
@@ -72,7 +73,7 @@
   display: block;
   font-size: 12px;
   font-weight: 600;
-  color: #666;
+  color: #aaa;
   margin-bottom: 8px;
   text-transform: uppercase;
 }
@@ -80,22 +81,24 @@
 .form-group input {
   width: 100%;
   padding: 12px;
-  border: 1px solid #ddd;
+  border: 1px solid #333;
   border-radius: 8px;
   font-size: 14px;
   font-family: inherit;
   transition: all 0.3s;
   box-sizing: border-box;
+  background: #262626;
+  color: #ffffff;
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #00B5D8;
-  box-shadow: 0 0 0 3px rgba(0, 181, 216, 0.1);
+  border-color: #d4af37;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
 }
 
 .form-group input:disabled {
-  background: #f5f5f5;
+  background: #1a1a1a;
   cursor: not-allowed;
 }
 
@@ -112,8 +115,8 @@
 .auth-submit-btn {
   width: 100%;
   padding: 14px;
-  background: linear-gradient(135deg, #00B5D8 0%, #0077B6 100%);
-  color: white;
+  background: #d4af37;
+  color: #0d0d0d;
   border: none;
   border-radius: 8px;
   font-size: 14px;
@@ -124,7 +127,8 @@
 }
 
 .auth-submit-btn:hover:not(:disabled) {
-  box-shadow: 0 4px 12px rgba(0, 181, 216, 0.3);
+  background: #e5c158;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
   transform: translateY(-2px);
 }
 
