@@ -126,9 +126,9 @@
 
 /* 操作按钮 */
 .stat-action-btn {
-  background: rgba(76, 175, 80, 0.25);
-  color: #4caf50;
-  border: 1px solid rgba(76, 175, 80, 0.3);
+  background: rgba(76, 175, 80, 0.12);
+  color: rgba(76, 175, 80, 0.7);
+  border: 1px solid rgba(76, 175, 80, 0.15);
   border-radius: 4px;
   padding: 3px 8px;
   font-size: 11px;
@@ -139,8 +139,8 @@
 }
 
 .stat-action-btn:hover {
-  background: rgba(76, 175, 80, 0.35);
-  border-color: rgba(76, 175, 80, 0.5);
+  background: rgba(76, 175, 80, 0.18);
+  border-color: rgba(76, 175, 80, 0.25);
 }
 
 /* 模态框 */

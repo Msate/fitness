@@ -65,7 +65,7 @@ function Statistics({ checkins, weights, onAddCheckin, onAddWeight }) {
       <div className="stat-card">
         <div className="stat-icon">✅</div>
         <div className="stat-info">
-          <p className="stat-label">今日打卡</p>
+          <p className="stat-label">今日运动</p>
           <div className="stat-content">
             <span className="stat-value">{todayCheckins}</span>
             <span className="stat-detail">次</span>
@@ -73,7 +73,7 @@ function Statistics({ checkins, weights, onAddCheckin, onAddWeight }) {
               className="stat-action-btn"
               onClick={() => setShowCheckinModal(true)}
             >
-              {todayCheckins === 0 ? '去打卡' : '继续打卡'}
+              打卡
             </button>
           </div>
         </div>
