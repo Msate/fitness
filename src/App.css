@@ -3,7 +3,7 @@
   background: linear-gradient(135deg, #00B5D8 0%, #0077B6 100%);
   display: flex;
   flex-direction: column;
-  padding-bottom: 70px;
+  padding-bottom: 0;
 }
 
 .header {
@@ -78,12 +78,8 @@
 
 /* iPhone 安全区域支持 */
 @supports (padding: max(0px)) {
-  .app {
-    padding-bottom: max(70px, env(safe-area-inset-bottom));
-  }
-  
-  .nav {
-    padding-bottom: env(safe-area-inset-bottom);
+  .main {
+    padding-bottom: max(15px, env(safe-area-inset-bottom));
   }
 }
 

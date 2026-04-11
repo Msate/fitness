@@ -1,15 +1,12 @@
 import { useState, useEffect } from 'react'
 import './App.css'
-import CheckinForm from './components/CheckinForm'
-import WeightForm from './components/WeightForm'
-import RecordList from './components/RecordList'
 import Statistics from './components/Statistics'
 import WeightChart from './components/WeightChart'
+import RecordList from './components/RecordList'
 
 function App() {
   const [checkins, setCheckins] = useState([])
   const [weights, setWeights] = useState([])
-  const [activeTab, setActiveTab] = useState('dashboard')
 
   // 从本地存储加载数据
   useEffect(() => {
@@ -66,48 +63,20 @@ function App() {
         <p>和老婆一起坚持</p>
       </header>
 
-      <nav className="nav">
-        <button 
-          className={`nav-btn ${activeTab === 'dashboard' ? 'active' : ''}`}
-          onClick={() => setActiveTab('dashboard')}
-        >
-          📊<br/>仪表板
-        </button>
-        <button 
-          className={`nav-btn ${activeTab === 'checkin' ? 'active' : ''}`}
-          onClick={() => setActiveTab('checkin')}
-        >
-          ✅<br/>打卡
-        </button>
-        <button 
-          className={`nav-btn ${activeTab === 'weight' ? 'active' : ''}`}
-          onClick={() => setActiveTab('weight')}
-        >
-          ⚖️<br/>体重
-        </button>
-      </nav>
-
       <main className="main">
-        {activeTab === 'dashboard' && (
-          <>
-            <Statistics checkins={checkins} weights={weights} />
-            <WeightChart weights={weights} />
-            <RecordList 
-              checkins={checkins} 
-              weights={weights}
-              onDeleteCheckin={deleteCheckin}
-              onDeleteWeight={deleteWeight}
-            />
-          </>
-        )}
-        
-        {activeTab === 'checkin' && (
-          <CheckinForm onSubmit={addCheckin} />
-        )}
-        
-        {activeTab === 'weight' && (
-          <WeightForm onSubmit={addWeight} />
-        )}
+        <Statistics 
+          checkins={checkins} 
+          weights={weights}
+          onAddCheckin={addCheckin}
+          onAddWeight={addWeight}
+        />
+        <WeightChart weights={weights} />
+        <RecordList 
+          checkins={checkins} 
+          weights={weights}
+          onDeleteCheckin={deleteCheckin}
+          onDeleteWeight={deleteWeight}
+        />
       </main>
     </div>
   )
