@@ -9,9 +9,12 @@ function Circle({ onBack, user }) {
   const [rankTab, setRankTab] = useState('weight')
   const [rankings, setRankings] = useState({ weight: [], calories: [] })
   const [rankLoading, setRankLoading] = useState(false)
+  const [circleBaseDate, setCircleBaseDate] = useState('')
 
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [showJoinModal, setShowJoinModal] = useState(false)
+  const [showSwitchModal, setShowSwitchModal] = useState(false)
+  const [showLeaveModal, setShowLeaveModal] = useState(false)
   const [circleName, setCircleName] = useState('')
   const [circleSlogan, setCircleSlogan] = useState('')
   const [creating, setCreating] = useState(false)
@@ -48,6 +51,15 @@ function Circle({ onBack, user }) {
   const loadRankings = async (circleId) => {
     setRankLoading(true)
     try {
+      // 获取圈子创建时间作为基准日期
+      const { data: circleInfo } = await supabase
+        .from('circles')
+        .select('created_at')
+        .eq('id', circleId)
+        .single()
+      const baseDate = circleInfo ? circleInfo.created_at.split('T')[0] : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+      setCircleBaseDate(baseDate)
+
       const { data: members } = await supabase
         .from('circle_members')
         .select('user_id')
@@ -62,13 +74,11 @@ function Circle({ onBack, user }) {
       const profileMap = {}
       ;(profiles || []).forEach(p => { profileMap[p.id] = p.username })
 
-      const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
-
       const { data: weightsData } = await supabase
         .from('weights')
         .select('user_id, weight, date')
         .in('user_id', userIds)
-        .gte('date', sevenDaysAgo)
+        .gte('date', baseDate)
         .order('date', { ascending: true })
 
       const weightByUser = {}
@@ -90,7 +100,7 @@ function Circle({ onBack, user }) {
         .from('checkins')
         .select('user_id, calories')
         .in('user_id', userIds)
-        .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
+        .gte('created_at', baseDate + 'T00:00:00Z')
 
       const calByUser = {}
       ;(checkinsData || []).forEach(c => {
@@ -153,18 +163,28 @@ function Circle({ onBack, user }) {
     setJoining(true)
     setJoinError('')
     try {
+      // 检查用户是否有体重记录
+      const { data: weightCheck } = await supabase
+        .from('weights')
+        .select('id')
+        .eq('user_id', user.id)
+        .limit(1)
+      if (!weightCheck || weightCheck.length === 0) {
+        setJoinError('加入圈子前，请先去首页记录一条体重数据！')
+        return
+      }
       const code = inviteInput.trim().toUpperCase()
       const { data: circle } = await supabase.from('circles').select('*').eq('invite_code', code).maybeSingle()
-      if (!circle) { setJoinError('invite code not found'); return }
+      if (!circle) { setJoinError('邀请码不存在，请检查后重试'); return }
       const { data: existing } = await supabase.from('circle_members').select('id')
         .eq('circle_id', circle.id).eq('user_id', user.id).maybeSingle()
-      if (existing) { setJoinError('already a member'); return }
+      if (existing) { setJoinError('你已经在这个圈子里了'); return }
       await supabase.from('circle_members').insert([{ circle_id: circle.id, user_id: user.id }])
       setInviteInput('')
       setShowJoinModal(false)
       loadMyCircles()
     } catch (err) {
-      setJoinError('join failed, please retry')
+      setJoinError('加入失败，请重试')
     } finally {
       setJoining(false)
     }
@@ -177,106 +197,179 @@ function Circle({ onBack, user }) {
     setCircleSlogan('')
   }
 
+  const handleLeaveCircle = async () => {
+    if (!selectedCircleId) return
+    try {
+      await supabase.from('circle_members')
+        .delete()
+        .eq('circle_id', selectedCircleId)
+        .eq('user_id', user.id)
+      setSelectedCircleId(null)
+      loadMyCircles()
+    } catch (err) {
+      console.error('leave circle failed:', err)
+    }
+  }
+
   const selectedCircle = myCircles.find(m => m.circle_id === selectedCircleId)?.circles
   const medalColors = ['#FFD700', '#C0C0C0', '#CD7F32']
 
   return (
     <div className="circle-page">
       <header className="circle-header">
-        <button className="circle-back-btn" onClick={onBack}>back</button>
-        <h1>circle</h1>
+        <button className="circle-back-btn" onClick={onBack}>返回</button>
+        <h1>我的圈子</h1>
         <div />
       </header>
 
       <main className="circle-main">
         <div className="circle-actions">
           <div className="circle-action-card" onClick={() => setShowJoinModal(true)}>
-            <span className="circle-action-icon">join</span>
+            <span className="circle-action-label">加入圈子</span>
+            <span className="circle-action-desc">输入邀请码加入</span>
           </div>
           <div className="circle-action-card" onClick={() => setShowCreateModal(true)}>
-            <span className="circle-action-icon">create</span>
+            <span className="circle-action-label">创建圈子</span>
+            <span className="circle-action-desc">建立你的团队</span>
           </div>
         </div>
 
-        {!loading && myCircles.length > 0 && (
-          <div>
-            <div className="circle-tabs">
-              {myCircles.map(m => (
-                <button
-                  key={m.circle_id}
-                  className={selectedCircleId === m.circle_id ? 'circle-tab active' : 'circle-tab'}
-                  onClick={() => setSelectedCircleId(m.circle_id)}
-                >
-                  {m.circles ? m.circles.name : ''}
-                </button>
-              ))}
+        {!loading && myCircles.length > 0 && selectedCircle && (
+          <div className="circle-panel">
+            <div className="circle-detail-top">
+              <div className="circle-detail-name-group">
+                <span className="circle-detail-name">{selectedCircle.name}</span>
+                <span className="circle-detail-code-sub">邀请码：{selectedCircle.invite_code}</span>
+              </div>
+              {myCircles.length > 1 && (
+                <button className="circle-switch-btn" onClick={() => setShowSwitchModal(true)}>切换</button>
+              )}
             </div>
 
-            {selectedCircle && (
-              <div className="circle-detail-card">
-                <div className="circle-detail-top">
-                  <div>
-                    <div className="circle-detail-name">{selectedCircle.name}</div>
-                    {selectedCircle.slogan && (
-                      <div className="circle-detail-slogan">{selectedCircle.slogan}</div>
-                    )}
-                  </div>
-                  <div className="circle-detail-code">{selectedCircle.invite_code}</div>
-                </div>
-              </div>
-            )}
+            <div className="circle-panel-divider" />
 
             <div className="rank-tabs">
               <button
                 className={rankTab === 'weight' ? 'rank-tab active' : 'rank-tab'}
                 onClick={() => setRankTab('weight')}
               >
-                7-day weight loss
+                减重榜
               </button>
               <button
                 className={rankTab === 'calories' ? 'rank-tab active' : 'rank-tab'}
                 onClick={() => setRankTab('calories')}
               >
-                7-day calories
+                消耗榜
               </button>
             </div>
+            {circleBaseDate && (
+              <p className="rank-base-date">自 {circleBaseDate} 圈子创建起</p>
+            )}
 
             <div className="rank-list">
-              {rankLoading && <p className="circle-hint">loading...</p>}
+              {rankLoading && <p className="circle-hint">加载中...</p>}
               {!rankLoading && rankTab === 'weight' && rankings.weight.length === 0 && (
-                <p className="circle-hint">no weight data</p>
+                <p className="circle-hint">圈子创建后暂无体重记录</p>
               )}
-              {!rankLoading && rankTab === 'weight' && rankings.weight.length > 0 && rankings.weight.map((item, idx) => (
-                <div key={idx} className={item.isMe ? 'rank-item rank-me' : 'rank-item'}>
-                  <span className="rank-no" style={{ color: idx < 3 ? medalColors[idx] : '#555' }}>
-                    {idx === 0 ? '1' : idx === 1 ? '2' : idx === 2 ? '3' : String(idx + 1)}
-                  </span>
-                  <span className="rank-name">{item.username}{item.isMe ? ' (me)' : ''}</span>
-                  <span className="rank-value" style={{ color: item.loss > 0 ? '#4caf50' : item.loss < 0 ? '#ff6b6b' : '#888' }}>
-                    {item.loss > 0 ? '-' + item.loss : item.loss < 0 ? '+' + Math.abs(item.loss) : '0'} kg
-                  </span>
-                </div>
-              ))}
+              {!rankLoading && rankTab === 'weight' && rankings.weight.length > 0 && (() => {
+                const maxLoss = Math.max(...rankings.weight.map(i => Math.abs(i.loss)), 0.1)
+                return rankings.weight.map((item, idx) => (
+                  <div key={idx} className={item.isMe ? 'rank-item rank-me' : 'rank-item'}>
+                    <span className="rank-no" style={{
+                      background: idx === 0 ? 'rgba(255,215,0,0.15)' : idx === 1 ? 'rgba(192,192,192,0.15)' : idx === 2 ? 'rgba(205,127,50,0.15)' : 'transparent',
+                      color: idx < 3 ? medalColors[idx] : '#444'
+                    }}>{String(idx + 1)}</span>
+                    <div className="rank-main">
+                      <div className="rank-row">
+                        <span className="rank-name">{item.username}{item.isMe ? ' (我)' : ''}</span>
+                        <span className="rank-value" style={{ color: item.loss > 0 ? '#52c41a' : item.loss < 0 ? '#ff6b6b' : '#555' }}>
+                          {item.loss > 0 ? '-' + item.loss : item.loss < 0 ? '+' + Math.abs(item.loss) : '--'} kg
+                        </span>
+                      </div>
+                      <div className="rank-bar-bg">
+                        <div className="rank-bar-fill" style={{ width: (Math.abs(item.loss) / maxLoss * 100) + '%', background: item.loss > 0 ? '#52c41a' : item.loss < 0 ? '#ff6b6b' : '#444' }} />
+                      </div>
+                    </div>
+                  </div>
+                ))
+              })()}
               {!rankLoading && rankTab === 'calories' && rankings.calories.length === 0 && (
-                <p className="circle-hint">no exercise data</p>
+                <p className="circle-hint">圈子创建后暂无运动记录</p>
               )}
-              {!rankLoading && rankTab === 'calories' && rankings.calories.length > 0 && rankings.calories.map((item, idx) => (
-                <div key={idx} className={item.isMe ? 'rank-item rank-me' : 'rank-item'}>
-                  <span className="rank-no" style={{ color: idx < 3 ? medalColors[idx] : '#555' }}>
-                    {idx === 0 ? '1' : idx === 1 ? '2' : idx === 2 ? '3' : String(idx + 1)}
-                  </span>
-                  <span className="rank-name">{item.username}{item.isMe ? ' (me)' : ''}</span>
-                  <span className="rank-value">{item.calories} kcal</span>
-                </div>
-              ))}
+              {!rankLoading && rankTab === 'calories' && rankings.calories.length > 0 && (() => {
+                const maxCal = Math.max(...rankings.calories.map(i => i.calories), 1)
+                return rankings.calories.map((item, idx) => (
+                  <div key={idx} className={item.isMe ? 'rank-item rank-me' : 'rank-item'}>
+                    <span className="rank-no" style={{
+                      background: idx === 0 ? 'rgba(255,215,0,0.15)' : idx === 1 ? 'rgba(192,192,192,0.15)' : idx === 2 ? 'rgba(205,127,50,0.15)' : 'transparent',
+                      color: idx < 3 ? medalColors[idx] : '#444'
+                    }}>{String(idx + 1)}</span>
+                    <div className="rank-main">
+                      <div className="rank-row">
+                        <span className="rank-name">{item.username}{item.isMe ? ' (我)' : ''}</span>
+                        <span className="rank-value">{item.calories > 0 ? item.calories + ' 大卡' : '--'}</span>
+                      </div>
+                      <div className="rank-bar-bg">
+                        <div className="rank-bar-fill" style={{ width: (item.calories / maxCal * 100) + '%', background: '#d4af37' }} />
+                      </div>
+                    </div>
+                  </div>
+                ))
+              })()}
             </div>
+
+            <span className="circle-leave-text" onClick={() => setShowLeaveModal(true)}>退出圈子</span>
           </div>
         )}
 
         {!loading && myCircles.length === 0 && (
-          <p className="circle-hint">no circles yet</p>
+          <p className="circle-hint">还没有加入任何圈子，快去创建或加入吧！</p>
         )}
       </main>
+
+      {showLeaveModal && (
+        <div className="circle-modal-overlay" onClick={() => setShowLeaveModal(false)}>
+          <div className="circle-modal circle-leave-modal" onClick={e => e.stopPropagation()}>
+            <div className="circle-leave-modal-body">
+              <div className="circle-leave-modal-icon">🎯</div>
+              <p className="circle-leave-modal-title">再坚持一下，成功就在眼前！</p>
+              <p className="circle-leave-modal-sub">确定要离开这个圈子吗？</p>
+              <div className="circle-leave-modal-btns">
+                <button className="circle-leave-modal-cancel" onClick={() => setShowLeaveModal(false)}>再想想</button>
+                <button className="circle-leave-modal-confirm" onClick={() => { setShowLeaveModal(false); handleLeaveCircle() }}>就这样吧</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showSwitchModal && (
+        <div className="circle-modal-overlay" onClick={() => setShowSwitchModal(false)}>
+          <div className="circle-modal" onClick={e => e.stopPropagation()}>
+            <div className="circle-modal-header">
+              <h2>选择圈子</h2>
+              <button className="circle-modal-close" onClick={() => setShowSwitchModal(false)}>✕</button>
+            </div>
+            <div className="circle-switch-list">
+              {myCircles.map(m => (
+                <div
+                  key={m.circle_id}
+                  className={m.circle_id === selectedCircleId ? 'circle-switch-item active' : 'circle-switch-item'}
+                  onClick={() => { setSelectedCircleId(m.circle_id); setShowSwitchModal(false) }}
+                >
+                  <div className="circle-switch-item-name">{m.circles ? m.circles.name : ''}</div>
+                  {m.circles && m.circles.slogan && (
+                    <div className="circle-switch-item-slogan">{m.circles.slogan}</div>
+                  )}
+                  {m.circle_id === selectedCircleId && (
+                    <span className="circle-switch-check">✓</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {showCreateModal && (
         <div className="circle-modal-overlay" onClick={closeCreateModal}>
@@ -284,32 +377,33 @@ function Circle({ onBack, user }) {
             {createResult ? (
               <div>
                 <div className="circle-modal-header">
-                  <h2>created</h2>
-                  <button className="circle-modal-close" onClick={closeCreateModal}>X</button>
+                  <h2>创建成功 🎉</h2>
+                  <button className="circle-modal-close" onClick={closeCreateModal}>✕</button>
                 </div>
                 <div className="circle-modal-body">
                   <p className="circle-success-name">{createResult.name}</p>
+                  <p className="circle-success-hint">把下方邀请码分享给小伙伴</p>
                   <div className="circle-invite-code">{createResult.inviteCode}</div>
-                  <button className="circle-primary-btn" onClick={closeCreateModal}>done</button>
+                  <button className="circle-primary-btn" onClick={closeCreateModal}>完成</button>
                 </div>
               </div>
             ) : (
               <div>
                 <div className="circle-modal-header">
-                  <h2>create circle</h2>
-                  <button className="circle-modal-close" onClick={closeCreateModal}>X</button>
+                  <h2>创建圈子</h2>
+                  <button className="circle-modal-close" onClick={closeCreateModal}>✕</button>
                 </div>
                 <div className="circle-modal-body">
                   <div className="circle-form-group">
-                    <label>name</label>
-                    <input type="text" value={circleName} onChange={e => setCircleName(e.target.value)} maxLength={20} />
+                    <label>圈子名称（{circleName.length}/7）</label>
+                    <input type="text" placeholder="给圈子起个名字" value={circleName} onChange={e => setCircleName(e.target.value)} maxLength={7} />
                   </div>
                   <div className="circle-form-group">
-                    <label>slogan</label>
-                    <input type="text" value={circleSlogan} onChange={e => setCircleSlogan(e.target.value)} maxLength={30} />
+                    <label>圈子宣言（{circleSlogan.length}/20）</label>
+                    <input type="text" placeholder="一句话激励大家（选填）" value={circleSlogan} onChange={e => setCircleSlogan(e.target.value)} maxLength={20} />
                   </div>
                   <button className="circle-primary-btn" onClick={handleCreate} disabled={!circleName.trim() || creating}>
-                    {creating ? '...' : 'create'}
+                    {creating ? '创建中...' : '创建圈子'}
                   </button>
                 </div>
               </div>
@@ -322,12 +416,12 @@ function Circle({ onBack, user }) {
         <div className="circle-modal-overlay" onClick={() => { setShowJoinModal(false); setJoinError(''); setInviteInput('') }}>
           <div className="circle-modal" onClick={e => e.stopPropagation()}>
             <div className="circle-modal-header">
-              <h2>join circle</h2>
-              <button className="circle-modal-close" onClick={() => { setShowJoinModal(false); setJoinError(''); setInviteInput('') }}>X</button>
+              <h2>加入圈子</h2>
+              <button className="circle-modal-close" onClick={() => { setShowJoinModal(false); setJoinError(''); setInviteInput('') }}>✕</button>
             </div>
             <div className="circle-modal-body">
               <div className="circle-form-group">
-                <label>invite code</label>
+                <label>邀请码</label>
                 <input type="text" value={inviteInput}
                   onChange={e => { setInviteInput(e.target.value); setJoinError('') }}
                   maxLength={5}
@@ -336,7 +430,7 @@ function Circle({ onBack, user }) {
               {joinError && <p className="circle-error">{joinError}</p>}
               <button className="circle-primary-btn" onClick={handleJoin}
                 disabled={inviteInput.trim().length !== 5 || joining}>
-                {joining ? '...' : 'join'}
+                {joining ? '加入中...' : '加入圈子'}
               </button>
             </div>
           </div>
