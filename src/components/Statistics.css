@@ -1,21 +1,24 @@
 .statistics {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 8px;
   margin: 0 0 15px;
   padding: 0;
+  width: 100%;
 }
 
 .stat-card {
   background: white;
-  border-radius: 12px;
-  padding: 12px;
+  border-radius: 10px;
+  padding: 10px 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  gap: 4px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   transition: all 0.3s;
+  min-width: 0;
 }
 
 .stat-card:active {
@@ -29,21 +32,24 @@
 }
 
 .stat-icon {
-  font-size: 28px;
+  font-size: 24px;
   text-align: center;
+  flex-shrink: 0;
 }
 
 .stat-info {
   width: 100%;
   text-align: center;
+  overflow: hidden;
 }
 
 .stat-label {
   color: #999;
-  font-size: 10px;
+  font-size: 9px;
   margin: 0;
   text-transform: uppercase;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;
+  line-height: 1.2;
 }
 
 .stat-card.highlight .stat-label {
@@ -51,10 +57,11 @@
 }
 
 .stat-value {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
   color: #667eea;
   margin: 0;
+  line-height: 1;
 }
 
 .stat-card.highlight .stat-value {
@@ -71,32 +78,13 @@
 
 .stat-detail {
   color: #ccc;
-  font-size: 11px;
+  font-size: 10px;
   margin: 0;
+  line-height: 1;
 }
 
 .stat-card.highlight .stat-detail {
   color: rgba(255, 255, 255, 0.8);
-}
-
-@media (max-width: 480px) {
-  .statistics {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-  }
-
-  .stat-card {
-    padding: 10px;
-    gap: 4px;
-  }
-
-  .stat-icon {
-    font-size: 24px;
-  }
-
-  .stat-value {
-    font-size: 20px;
-  }
 }
 
 @media (max-width: 768px) {
