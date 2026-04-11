@@ -1,0 +1,106 @@
+.app {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 40px 20px;
+  text-align: center;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.header p {
+  margin: 0;
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+.nav {
+  background: white;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-btn {
+  flex: 1;
+  max-width: 200px;
+  padding: 16px 20px;
+  border: none;
+  background: white;
+  color: #666;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  border-bottom: 3px solid transparent;
+}
+
+.nav-btn:hover {
+  color: #667eea;
+  background: #f9f9f9;
+}
+
+.nav-btn.active {
+  color: #667eea;
+  border-bottom-color: #667eea;
+  background: #f9f9f9;
+}
+
+.main {
+  padding: 30px 20px;
+  padding-bottom: 50px;
+}
+
+@media (max-width: 768px) {
+  .header h1 {
+    font-size: 28px;
+  }
+
+  .header p {
+    font-size: 14px;
+  }
+
+  .nav-btn {
+    font-size: 14px;
+    padding: 14px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 30px 15px;
+  }
+
+  .header h1 {
+    font-size: 24px;
+  }
+
+  .nav {
+    flex-direction: column;
+  }
+
+  .nav-btn {
+    max-width: 100%;
+    border-right: 3px solid transparent;
+    border-bottom: none;
+  }
+
+  .nav-btn.active {
+    border-right-color: #667eea;
+    border-bottom: none;
+  }
+}
