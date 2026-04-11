@@ -46,12 +46,13 @@
 
 .stat-label {
   color: #999;
-  font-size: 9px;
-  margin: 0;
+  font-size: 12px;
+  margin: 0 0 4px 0;
   text-transform: uppercase;
   letter-spacing: 0px;
   line-height: 1;
   display: block;
+  font-weight: 600;
 }
 
 .stat-card.highlight .stat-label {
@@ -92,6 +93,13 @@
   color: rgba(255, 255, 255, 0.8);
 }
 
+.stat-content {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
 @media (max-width: 768px) {
   .statistics {
     grid-template-columns: repeat(2, 1fr);
@@ -118,29 +126,21 @@
 
 /* 操作按钮 */
 .stat-action-btn {
-  background: linear-gradient(135deg, #00B5D8 0%, #0077B6 100%);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 6px 12px;
-  font-size: 12px;
+  background: rgba(76, 175, 80, 0.25);
+  color: #4caf50;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 11px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
-  margin-top: 4px;
-  width: 100%;
-  text-align: center;
+  white-space: nowrap;
 }
 
 .stat-action-btn:hover {
-  box-shadow: 0 4px 12px rgba(0, 181, 216, 0.3);
-  transform: translateY(-2px);
-}
-
-.stat-action-btn.small {
-  padding: 4px 8px;
-  font-size: 11px;
-  margin-top: 2px;
+  background: rgba(76, 175, 80, 0.35);
+  border-color: rgba(76, 175, 80, 0.5);
 }
 
 /* 模态框 */

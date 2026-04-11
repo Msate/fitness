@@ -66,25 +66,16 @@ function Statistics({ checkins, weights, onAddCheckin, onAddWeight }) {
         <div className="stat-icon">✅</div>
         <div className="stat-info">
           <p className="stat-label">今日打卡</p>
-          {todayCheckins === 0 ? (
+          <div className="stat-content">
+            <span className="stat-value">{todayCheckins}</span>
+            <span className="stat-detail">次</span>
             <button 
               className="stat-action-btn"
               onClick={() => setShowCheckinModal(true)}
             >
-              去打卡
+              {todayCheckins === 0 ? '去打卡' : '继续打卡'}
             </button>
-          ) : (
-            <>
-              <p className="stat-value">{todayCheckins}</p>
-              <p className="stat-detail">次</p>
-              <button 
-                className="stat-action-btn small"
-                onClick={() => setShowCheckinModal(true)}
-              >
-                继续打卡
-              </button>
-            </>
-          )}
+          </div>
         </div>
       </div>
 
@@ -103,25 +94,16 @@ function Statistics({ checkins, weights, onAddCheckin, onAddWeight }) {
         <div className="stat-icon">⚖️</div>
         <div className="stat-info">
           <p className="stat-label">最新体重</p>
-          {latestWeight ? (
-            <>
-              <p className="stat-value">{latestWeight}</p>
-              <p className="stat-detail">kg</p>
-              <button 
-                className="stat-action-btn small"
-                onClick={() => setShowWeightModal(true)}
-              >
-                更新
-              </button>
-            </>
-          ) : (
+          <div className="stat-content">
+            <span className="stat-value">{latestWeight || '--'}</span>
+            <span className="stat-detail">kg</span>
             <button 
               className="stat-action-btn"
               onClick={() => setShowWeightModal(true)}
             >
-              记录体重
+              {latestWeight ? '更新' : '记录'}
             </button>
-          )}
+          </div>
         </div>
       </div>
 
