@@ -64,7 +64,7 @@
   color: #667eea;
   margin: 0;
   line-height: 1;
-  display: block;
+  display: inline;
 }
 
 .stat-card.highlight .stat-value {
@@ -84,7 +84,8 @@
   font-size: 9px;
   margin: 0;
   line-height: 1;
-  display: block;
+  display: inline;
+  margin-left: 2px;
 }
 
 .stat-card.highlight .stat-detail {
