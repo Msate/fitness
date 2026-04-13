@@ -226,13 +226,20 @@ function Statistics({ checkins, weights, onAddCheckin, onAddWeight, onOpenCircle
             </div>
             <div className="modal-body">
               <div className="form-group">
-                <label>体重 (kg)</label>
+                <label>体重 (KG)</label>
                 <input 
                   type="number" 
-                  step="0.1"
-                  placeholder="输入体重"
+                  step="0.01"
+                  placeholder="输入体重..."
                   value={weightInput}
-                  onChange={e => setWeightInput(e.target.value)}
+                  onChange={e => {
+                    let val = e.target.value;
+                    // 正则限制最多2位小数
+                    if (val.includes('.') && val.split('.')[1].length > 2) {
+                      val = val.substring(0, val.indexOf('.') + 3);
+                    }
+                    setWeightInput(val);
+                  }}
                   autoFocus
                 />
               </div>

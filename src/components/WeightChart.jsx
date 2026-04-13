@@ -80,17 +80,17 @@ function WeightChart({ weights }) {
     const labelY = isMax ? cy - 12 : cy + 20
     return (
       <g>
-        <circle cx={cx} cy={cy} r={r} fill="#d4af37" stroke="#0d0d0d" strokeWidth={isMin || isMax ? 2 : 1} />
+        <circle cx={cx} cy={cy} r={r} fill="var(--accent-primary)" stroke="var(--bg-surface)" strokeWidth={isMin || isMax ? 2 : 1} />
         {(isMin || isMax) && (
           <text
             x={cx}
             y={labelY}
             textAnchor="middle"
             fontSize={11}
-            fill="#d4af37"
+            fill="var(--accent-primary)"
             fontWeight="bold"
           >
-            {payload.weight}kg
+            {payload.weight}
           </text>
         )}
       </g>
@@ -129,37 +129,39 @@ function WeightChart({ weights }) {
         <div className="chart-empty">暂无体重数据</div>
       ) : (
       <ResponsiveContainer width="100%" height={280}>
-        <LineChart data={data} margin={{ top: 28, right: 10, left: -20, bottom: 28 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+        <LineChart data={data} margin={{ top: 28, right: 30, left: -20, bottom: 28 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
           <XAxis 
             dataKey="date" 
-            tick={{ fontSize: 12, fill: '#888' }}
-            stroke="#333"
+            tick={{ fontSize: 12, fill: 'var(--text-secondary)' }}
+            stroke="var(--border-color)"
             tickFormatter={formatXAxis}
           />
           <YAxis 
             domain={[dataMin => Math.floor(dataMin) - 1, dataMax => Math.ceil(dataMax) + 1]}
-            tick={{ fontSize: 12, fill: '#888' }}
-            stroke="#333"
+            tick={{ fontSize: 12, fill: 'var(--text-secondary)' }}
+            stroke="var(--border-color)"
           />
           <Tooltip
             contentStyle={{
-              background: '#262626',
-              border: '1px solid #d4af37',
+              background: 'var(--bg-surface-hover)',
+              border: '1px solid var(--border-color)',
               borderRadius: '8px',
               fontSize: '12px',
-              color: '#d4af37'
+              color: 'var(--text-primary)'
             }}
-            formatter={(value) => `${value} kg`}
+            formatter={(value) => `${value}`}
+            labelStyle={{ color: 'var(--text-secondary)' }}
+            itemStyle={{ color: 'var(--accent-primary)' }}
           />
           <Line
             type="monotone"
             dataKey="weight"
-            stroke="#d4af37"
+            stroke="var(--accent-primary)"
             strokeWidth={2}
             connectNulls={true}
             dot={<CustomDotWithLabel />}
-            activeDot={{ r: 6 }}
+            activeDot={{ r: 6, fill: "var(--accent-primary)", stroke: "var(--bg-surface)" }}
           />
         </LineChart>
       </ResponsiveContainer>

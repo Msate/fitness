@@ -1,109 +1,133 @@
 .app {
   min-height: 100vh;
-  background: #0d0d0d;
+  background: var(--bg-base);
   display: flex;
   flex-direction: column;
   padding-bottom: 0;
 }
 
 .header {
-  background: #1a1a1a;
-  border-bottom: 1px solid #333333;
-  color: white;
-  padding: 8px 20px 6px 20px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 8px 16px;
+  box-shadow: var(--shadow-sm);
   flex-shrink: 0;
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .header-content {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
 }
 
 .header h1 {
-  margin: 0 0 3px 0;
-  font-size: 24px;
+  margin: 0 0 2px 0;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
 .header p {
   margin: 0;
   font-size: 12px;
-  opacity: 0.9;
+  color: var(--text-secondary);
 }
 
 .header-user {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 4px;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
 }
 
 .username {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
-  color: #d4af37;
+  color: var(--text-primary);
 }
 
 .logout-btn {
-  background: rgba(212, 175, 55, 0.1);
-  color: #d4af37;
-  border: 1px solid #d4af37;
-  border-radius: 6px;
-  padding: 4px 10px;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.2s ease;
 }
 
 .logout-btn:hover {
-  background: rgba(212, 175, 55, 0.2);
-  border-color: #d4af37;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  transform: translateY(-1px);
 }
 
 .nav {
-  background: white;
+  background: rgba(28, 31, 38, 0.85); /* var(--bg-surface) with opacity */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   padding: 0;
   display: flex;
   justify-content: space-around;
   gap: 0;
-  box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-nav);
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 100;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--border-color);
 }
 
 .nav-btn {
   flex: 1;
-  padding: 12px 8px;
+  padding: 14px 8px;
   border: none;
-  background: white;
-  color: #999;
+  background: transparent;
+  color: var(--text-secondary);
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s;
-  border-top: 3px solid transparent;
+  transition: all 0.3s ease;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+}
+
+.nav-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 3px;
+  background: var(--accent-primary);
+  border-radius: 0 0 3px 3px;
+  transition: width 0.3s ease;
 }
 
 .nav-btn:hover {
-  color: #667eea;
-  background: #f9f9f9;
+  color: var(--text-primary);
+  background: var(--bg-surface-hover);
 }
 
 .nav-btn.active {
-  color: #667eea;
-  border-top-color: #667eea;
-  background: #f9f9f9;
+  color: var(--accent-primary);
+}
+
+.nav-btn.active::before {
+  width: 24px;
 }
 
 .main {
@@ -121,12 +145,12 @@
 
 @media (max-width: 600px) {
   .header {
-    padding: 15px;
+    padding: 10px 16px;
   }
 
   .header h1 {
-    font-size: 24px;
-    margin-bottom: 3px;
+    font-size: 18px;
+    margin-bottom: 2px;
   }
 
   .header p {
@@ -141,11 +165,11 @@
 
 @media (max-width: 768px) {
   .header h1 {
-    font-size: 28px;
+    font-size: 18px;
   }
 
   .header p {
-    font-size: 14px;
+    font-size: 12px;
   }
 
   .nav-btn {
@@ -156,11 +180,11 @@
 
 @media (max-width: 480px) {
   .header {
-    padding: 30px 15px;
+    padding: 10px 16px;
   }
 
   .header h1 {
-    font-size: 24px;
+    font-size: 18px;
   }
 
   .nav {

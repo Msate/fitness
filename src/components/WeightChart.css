@@ -1,16 +1,16 @@
 .weight-chart {
-  background: #1a1a1a;
-  border-radius: 12px;
+  background: var(--bg-surface);
+  border-radius: var(--radius-md);
   padding: 15px;
   margin-bottom: 15px;
-  border: 1px solid #333;
+  border: 1px solid var(--border-color);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .weight-chart h3 {
   margin: 0 0 16px;
   font-size: 16px;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .chart-empty {
@@ -30,19 +30,19 @@
   flex: 1;
   padding: 8px 12px;
   border: 2px solid #333;
-  background: #262626;
+  background: var(--bg-surface-hover);
   border-radius: 6px;
   font-size: 12px;
   font-weight: 600;
-  color: #888;
+  color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.3s;
 }
 
 .chart-tab.active {
-  border-color: #d4af37;
-  background: #d4af37;
-  color: #0d0d0d;
+  border-color: var(--accent-primary);
+  background: var(--accent-primary);
+  color: var(--bg-base);
 }
 
 .chart-tab:active {
@@ -59,21 +59,21 @@
 .stat {
   text-align: center;
   padding: 8px;
-  background: #0d0d0d;
+  background: var(--bg-base);
   border-radius: 6px;
-  border: 1px solid #333;
+  border: 1px solid var(--border-color);
 }
 
 .stat .label {
   font-size: 11px;
-  color: #888;
+  color: var(--text-secondary);
   margin-bottom: 4px;
 }
 
 .stat .value {
   font-size: 16px;
   font-weight: bold;
-  color: #d4af37;
+  color: var(--accent-primary);
 }
 
 @media (max-width: 480px) {

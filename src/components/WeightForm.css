@@ -1,13 +1,13 @@
 .weight-form .tips {
   margin-top: 15px;
   padding: 12px;
-  background: rgba(212, 175, 55, 0.1);
-  border-left: 4px solid #d4af37;
-  border-radius: 8px;
+  background: var(--accent-primary) 0.1);
+  border-left: 4px solid var(--accent-primary);
+  border-radius: var(--radius-md);
 }
 
 .weight-form .tips h3 {
-  color: #d4af37;
+  color: var(--accent-primary);
   margin: 0 0 10px 0;
   font-size: 14px;
 }
@@ -19,7 +19,7 @@
 }
 
 .weight-form .tips li {
-  color: #aaa;
+  color: var(--text-secondary);
   padding: 6px 0;
   line-height: 1.5;
   font-size: 13px;
@@ -27,7 +27,7 @@
 
 .weight-form .tips li:before {
   content: "✓ ";
-  color: #d4af37;
+  color: var(--accent-primary);
   font-weight: bold;
   margin-right: 6px;
 }
@@ -37,3 +37,6 @@
   font-family: inherit;
   min-height: 100px;
 }
+
+button { transition: all 0.2s ease-in-out; }
+button:hover { transform: translateY(-1px); }

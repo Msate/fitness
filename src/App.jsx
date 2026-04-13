@@ -160,14 +160,14 @@ function App() {
 
   return (
     <div className="app">
-      <header className="header">
-        <div className="header-content">
-          <div>
-            <h1>Fitness</h1>
-            <p>减肥让生活更美好</p>
+      <header className="header" style={{ padding: "10px 16px" }}>
+        <div className="header-content" style={{ margin: 0 }}>
+           <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+            <h1 style={{ fontSize: "18px", margin: 0, lineHeight: 1 }}>Fitness</h1>
+            <p style={{ fontSize: "12px", margin: 0, lineHeight: 1 }}>每一天都在变好</p>
           </div>
           <div className="header-user">
-            <span className="username">{user.username}</span>
+            <span className="username" style={{ fontSize: '13px' }}>{user.username}</span>
             <button className="logout-btn" onClick={handleLogout}>退出</button>
           </div>
         </div>

@@ -1,7 +1,39 @@
+:root {
+  /* Modern Dark Theme Palette */
+  --bg-base: #0f1115;
+  --bg-surface: #1c1f26;
+  --bg-surface-hover: #262a33;
+  --text-primary: #f0f2f5;
+  --text-secondary: #9ba1a6;
+  --accent-primary: #8ba3ba; /* Slate Blue Minimal */
+  --accent-primary-hover: #a3bad1;
+  --accent-gold: #fbbf24;
+  --border-color: rgba(255, 255, 255, 0.08);
+  
+  /* System Spacing & Radius */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+  
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.25);
+  --shadow-nav: 0 -4px 20px rgba(0, 0, 0, 0.4);
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  scrollbar-width: none; /* Firefox: 隐藏滚动条 */
+}
+
+/* Chrome, Safari, Edge: 隐藏滚动条 */
+::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 html {
@@ -19,8 +51,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #0d0d0d;
-  color: #ffffff;
+  background: var(--bg-base);
+  color: var(--text-primary);
   overflow-x: hidden;
   
   /* 移动端优化 */
@@ -56,4 +88,14 @@ input, textarea, button, select {
   body {
     font-size: 14px;
   }
+}
+
+/* 隐藏输入框的上下调节箭头 */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
 }

@@ -5,16 +5,16 @@
 }
 
 .records-section {
-  background: #1a1a1a;
+  background: var(--bg-surface);
   border-radius: 12px;
   padding: 15px;
   margin-bottom: 15px;
-  border: 1px solid #333;
+  border: 1px solid var(--border-color);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .records-section h3 {
-  color: #ffffff;
+  color: var(--text-primary);
   margin: 0 0 12px;
   font-size: 16px;
 }
@@ -37,12 +37,12 @@
   align-items: center;
   gap: 12px;
   padding: 12px;
-  background: #262626;
+  background: var(--bg-surface-hover);
   border-radius: 10px;
-  border-left: 4px solid #d4af37;
+  border-left: 4px solid var(--accent-primary);
   transition: all 0.3s;
-  border: 1px solid #333;
-  border-left: 4px solid #d4af37;
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--accent-primary);
 }
 
 .record-item:active {
@@ -70,7 +70,7 @@
 }
 
 .record-activity {
-  color: #ffffff;
+  color: var(--text-primary);
   font-weight: 600;
   margin: 0;
   font-size: 14px;
@@ -82,7 +82,7 @@
 }
 
 .record-weight {
-  color: #ffffff;
+  color: var(--text-primary);
   font-weight: 600;
   margin: 0 0 4px;
   font-size: 14px;
@@ -90,7 +90,7 @@
 
 .weight-value {
   font-size: 18px;
-  color: #d4af37;
+  color: var(--accent-primary);
   font-weight: bold;
 }
 
@@ -98,7 +98,7 @@
   margin-left: 8px;
   font-size: 12px;
   padding: 2px 6px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   display: inline-block;
 }
 
@@ -127,12 +127,12 @@
 }
 
 .record-note {
-  color: #aaa;
+  color: var(--text-secondary);
   font-size: 12px;
   margin-top: 6px;
   padding: 6px;
-  background: #0d0d0d;
-  border-radius: 4px;
+  background: var(--bg-base);
+  border-radius: var(--radius-sm);
   border-left: 2px solid #333;
   padding-left: 8px;
 }
@@ -167,17 +167,17 @@
   gap: 12px;
   margin-top: 12px;
   padding-top: 12px;
-  border-top: 1px solid #333;
+  border-top: 1px solid var(--border-color);
 }
 
 .pagination-btn {
   padding: 8px 12px;
   border: 2px solid #333;
-  background: #262626;
-  border-radius: 6px;
+  background: var(--bg-surface-hover);
+  border-radius: var(--radius-md);
   font-size: 12px;
   font-weight: 600;
-  color: #888;
+  color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.3s;
 }
@@ -192,9 +192,9 @@
 }
 
 .pagination-btn:not(:disabled):active {
-  background: #d4af37;
-  color: #0d0d0d;
-  border-color: #d4af37;
+  background: var(--accent-primary);
+  color: var(--bg-base);
+  border-color: var(--accent-primary);
 }
 
 .pagination-info {
